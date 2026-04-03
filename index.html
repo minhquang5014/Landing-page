@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UniVoice — Speak. Connect. Belong.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;1,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+
+<style>
+/* ── THEME TOKENS ─────────────────────────────── */
+:root {
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="light"] {
+  --bg:       #e7e2db;
+  --surface2: #d8d1c8;
+  --surface:  #cbbeb1;
+  --border:   rgba(46,44,42,0.13);
+  --text:     #1a1a1a;
+  --muted:    #7a7570;
+  --accent:   #e8a87c;
+  --button:   #FE8C00;
+  --teal:     #4a9e80;
+  --amber:    #c8821a;
+  --red:      #c0392b;
+  --dark:     #1a1a1a;
+  --hero-glow: rgba(232,168,124,0.25);
+  --card-shadow: 0 4px 32px rgba(26,26,26,0.07);
+  --noise-opacity: 0.03;
+}
+
+[data-theme="dark"] {
+  --bg:       #0d0f14;
+  --surface2: #141720;
+  --surface:  #1c2030;
+  --border:   #252a3a;
+  --text:     #eef0f6;
+  --muted:    #5a6180;
+  --accent:   #3ee8b5;
+  --button:   #f5a623;
+  --teal:     #3ee8b5;
+  --amber:    #f5a623;
+  --red:      #f05454;
+  --dark:     #eef0f6;
+  --hero-glow: rgba(62,232,181,0.12);
+  --card-shadow: 0 4px 40px rgba(0,0,0,0.4);
+  --noise-opacity: 0.05;
+}
+
+/* ── RESET ──────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.4s var(--ease-out), color 0.4s var(--ease-out);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: var(--noise-opacity);
+  mix-blend-mode: overlay;
+  transition: opacity 0.4s;
+}
+
+/* ── NAVBAR ──────────────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  height: 68px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  transition: background 0.4s, border-color 0.4s;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.nav-logo-icon {
+  width: 36px; height: 36px;
+  background: var(--button);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-logo-icon svg { width: 20px; height: 20px; }
+
+.nav-logo-text {
+  font-family: 'Lora', serif;
+  font-weight: 500;
+  font-size: 1.25rem;
+  color: var(--text);
+  transition: color 0.4s;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--muted);
+  transition: color 0.2s;
+  letter-spacing: 0.01em;
+}
+.nav-links a:hover { color: var(--text); }
+
+.nav-right {
+  display: flex; align-items: center; gap: 1rem;
+}
+
+/* Theme toggle */
+.theme-toggle {
+  width: 48px; height: 26px;
+  border-radius: 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.4s, border-color 0.4s;
+  flex-shrink: 0;
+}
+
+.theme-toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--button);
+  transition: transform 0.35s var(--ease-spring), background 0.4s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+[data-theme="dark"] .theme-toggle::after { transform: translateX(22px); }
+
+.theme-icon {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  font-size: 0.6rem;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.theme-icon.sun { right: 6px; opacity: 1; }
+.theme-icon.moon { left: 5px; opacity: 0; }
+[data-theme="dark"] .theme-icon.sun { opacity: 0; }
+[data-theme="dark"] .theme-icon.moon { opacity: 1; }
+
+.btn-cta-nav {
+  padding: 0.5rem 1.2rem;
+  background: var(--button);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-spring), box-shadow 0.2s, opacity 0.2s;
+  letter-spacing: 0.01em;
+}
+.btn-cta-nav:hover { transform: translateY(-1px); box-shadow: 0 4px 16px color-mix(in srgb, var(--button) 40%, transparent); }
+
+/* ── HERO ────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  padding: 68px clamp(1.5rem, 6vw, 5rem) 0;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Radial glow blobs */
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  animation: floatBlob 8s ease-in-out infinite;
+}
+.hero-glow-1 {
+  width: 600px; height: 600px;
+  top: -10%; left: -10%;
+  background: var(--hero-glow);
+  animation-delay: 0s;
+}
+.hero-glow-2 {
+  width: 500px; height: 500px;
+  bottom: -5%; right: -5%;
+  background: color-mix(in srgb, var(--teal) 15%, transparent);
+  animation-delay: -4s;
+}
+.hero-glow-3 {
+  width: 300px; height: 300px;
+  top: 40%; left: 50%;
+  background: color-mix(in srgb, var(--amber) 10%, transparent);
+  animation-delay: -2s;
+}
+
+@keyframes floatBlob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.95); }
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 860px;
+  padding: 5rem 0 6rem;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface2);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  animation: fadeUp 0.8s var(--ease-out) 0.1s both;
+}
+.hero-badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.7); }
+}
+
+.hero-headline {
+  font-family: 'Lora', serif;
+  font-weight: 500;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.8s var(--ease-out) 0.2s both;
+}
+
+.hero-headline em {
+  font-style: italic;
+  color: var(--button);
+  position: relative;
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 560px;
+  margin: 0 auto 2.5rem;
+  font-weight: 400;
+  animation: fadeUp 0.8s var(--ease-out) 0.35s both;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s var(--ease-out) 0.5s both;
+}
+
+.btn-primary {
+  padding: 0.875rem 2rem;
+  background: var(--button);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease-spring), box-shadow 0.2s;
+  box-shadow: 0 4px 24px color-mix(in srgb, var(--button) 35%, transparent);
+}
+.btn-primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 36px color-mix(in srgb, var(--button) 45%, transparent); }
+
+.btn-secondary {
+  padding: 0.875rem 1.75rem;
+  background: transparent;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.btn-secondary:hover { background: var(--surface2); transform: translateY(-1px); }
+
+/* Voice wave animation */
+.hero-wave-wrap {
+  margin-top: 3rem;
+  animation: fadeUp 0.8s var(--ease-out) 0.65s both;
+}
+
+.wave-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 64px;
+}
+
+.wave-bar {
+  width: 4px;
+  border-radius: 2px;
+  background: var(--button);
+  animation: waveAnim 1.4s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+@keyframes waveAnim {
+  0%, 100% { height: 8px; }
+  50% { height: var(--h); }
+}
+
+.wave-label {
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── SECTION COMMON ──────────────────────────────── */
+section {
+  padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 6vw, 5rem);
+  position: relative;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 24px; height: 1.5px;
+  background: var(--teal);
+}
+
+.section-title {
+  font-family: 'Lora', serif;
+  font-weight: 500;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 520px;
+}
+
+/* ── OFFERING ──────────────────────────────────────── */
+.offering {
+  background: var(--surface2);
+  transition: background 0.4s;
+}
+
+.offering-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 4rem;
+}
+
+@media (max-width: 768px) { .offering-grid { grid-template-columns: 1fr; } }
+
+.offer-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2.25rem;
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s, background 0.4s, border-color 0.4s;
+  box-shadow: var(--card-shadow);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(30px);
+}
+.offer-card.visible { opacity: 1; transform: translateY(0); transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out), box-shadow 0.3s; }
+.offer-card:hover { transform: translateY(-4px); box-shadow: 0 12px 48px rgba(0,0,0,0.12); }
+
+[data-theme="dark"] .offer-card:hover { box-shadow: 0 12px 48px rgba(0,0,0,0.5); }
+
+.offer-card-accent {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 20px 20px 0 0;
+}
+
+.offer-icon-wrap {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.offer-card h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.01em;
+}
+
+.offer-card p {
+  color: var(--muted);
+  font-size: 0.93rem;
+  line-height: 1.65;
+}
+
+.offer-tag {
+  display: inline-flex;
+  margin-top: 1.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Big card spanning full width */
+.offer-card.wide { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; }
+@media (max-width: 768px) { .offer-card.wide { grid-column: 1; grid-template-columns: 1fr; } }
+
+/* Room preview mock */
+.room-preview {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  transition: background 0.4s;
+}
+
+.room-participants {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.participant {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  background: var(--bg);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text);
+  transition: background 0.4s;
+}
+
+.participant-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+}
+
+.room-wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 32px;
+}
+
+.room-bar {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--teal);
+  animation: roomWave 1.2s ease-in-out infinite;
+}
+@keyframes roomWave {
+  0%, 100% { height: 4px; }
+  50% { height: var(--rh); }
+}
+
+/* ── HOW IT WORKS ──────────────────────────────────── */
+.how {
+  background: var(--bg);
+  transition: background 0.4s;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
+  position: relative;
+}
+
+@media (max-width: 768px) { .steps { grid-template-columns: 1fr; } }
+
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 36px;
+  left: calc(100%/6);
+  right: calc(100%/6);
+  height: 1px;
+  background: var(--border);
+}
+@media (max-width: 768px) { .steps::before { display: none; } }
+
+.step {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(24px);
+}
+.step.visible { opacity: 1; transform: none; transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out); }
+
+.step-num {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-family: 'Lora', serif;
+  font-weight: 500;
+  font-size: 1.5rem;
+  color: var(--text);
+  position: relative;
+  z-index: 1;
+  transition: background 0.3s, transform 0.3s var(--ease-spring);
+}
+.step:hover .step-num { transform: scale(1.08); background: var(--surface); }
+
+.step h3 {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.step p { font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
+
+/* ── SECURITY ─────────────────────────────────────── */
+.security {
+  background: var(--surface2);
+  transition: background 0.4s;
+}
+
+.security-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 4rem;
+}
+@media (max-width: 768px) { .security-grid { grid-template-columns: 1fr; } }
+
+.sec-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  background: var(--bg);
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  transition: background 0.4s, border-color 0.4s, transform 0.3s var(--ease-spring);
+  box-shadow: var(--card-shadow);
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.sec-card.visible { opacity: 1; transform: none; transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out), box-shadow 0.3s; }
+.sec-card:nth-child(even) { transform: translateX(20px); }
+.sec-card.visible:nth-child(even) { transform: none; }
+.sec-card:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+[data-theme="dark"] .sec-card:hover { box-shadow: 0 10px 40px rgba(0,0,0,0.45); }
+
+.sec-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.sec-card h3 {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+.sec-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+/* Trust badge strip */
+.trust-strip {
+  margin-top: 3.5rem;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.trust-item svg { opacity: 0.7; }
+
+/* ── TESTIMONIALS / SOCIAL PROOF ─────────────────── */
+.social-proof {
+  background: var(--bg);
+  transition: background 0.4s;
+  overflow: hidden;
+}
+
+.lang-ticker {
+  display: flex;
+  gap: 2rem;
+  margin-top: 3rem;
+  animation: ticker 20s linear infinite;
+  white-space: nowrap;
+  width: max-content;
+}
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.lang-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  transition: background 0.4s;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 4rem;
+}
+@media (max-width: 600px) { .stat-row { grid-template-columns: 1fr; } }
+
+.stat-card {
+  text-align: center;
+  padding: 2rem;
+  background: var(--surface2);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  transition: background 0.4s;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.stat-card.visible { opacity: 1; transform: none; transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out); }
+
+.stat-num {
+  font-family: 'Lora', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.03em;
+}
+.stat-unit { color: var(--button); }
+.stat-label { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; font-weight: 500; }
+
+/* ── CTA ──────────────────────────────────────────── */
+.cta-section {
+  background: var(--dark);
+  color: #fff;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="light"] .cta-section { background: #1a1a1a; }
+[data-theme="dark"] .cta-section { background: var(--surface); }
+
+.cta-glow {
+  position: absolute;
+  width: 600px; height: 400px;
+  border-radius: 50%;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--button) 20%, transparent), transparent 70%);
+  pointer-events: none;
+  animation: ctaGlow 6s ease-in-out infinite;
+}
+@keyframes ctaGlow { 0%,100%{opacity:0.7;} 50%{opacity:1;} }
+
+.cta-section .section-label { justify-content: center; color: var(--accent); }
+.cta-section .section-label::before { background: var(--accent); }
+
+.cta-title {
+  font-family: 'Lora', serif;
+  font-weight: 500;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+[data-theme="dark"] .cta-title { color: var(--text); }
+
+.cta-sub { color: rgba(255,255,255,0.55); font-size: 1.05rem; margin-bottom: 2.5rem; max-width: 420px; margin-left: auto; margin-right: auto; }
+[data-theme="dark"] .cta-sub { color: var(--muted); }
+
+.download-btns {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.download-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.75rem;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  border-radius: 12px;
+  color: #fff;
+  background: rgba(255,255,255,0.07);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.25s var(--ease-spring), border-color 0.2s;
+  backdrop-filter: blur(10px);
+  text-decoration: none;
+}
+[data-theme="dark"] .download-btn { border-color: var(--border); color: var(--text); background: var(--surface2); }
+.download-btn:hover { background: rgba(255,255,255,0.13); transform: translateY(-2px); border-color: rgba(255,255,255,0.35); }
+[data-theme="dark"] .download-btn:hover { background: var(--surface); }
+
+.download-btn-label { font-size: 0.7rem; opacity: 0.6; display: block; line-height: 1; }
+.download-btn-store { font-size: 1rem; font-weight: 600; display: block; line-height: 1.4; }
+
+/* ── FOOTER ──────────────────────────────────────── */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 2.5rem clamp(1.5rem, 6vw, 5rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  transition: background 0.4s, border-color 0.4s;
+}
+
+.footer-brand { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 500; color: var(--text); }
+.footer-copy { font-size: 0.82rem; color: var(--muted); }
+
+.footer-links { display: flex; gap: 1.5rem; list-style: none; }
+.footer-links a { font-size: 0.82rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--text); }
+
+/* ── ANIMATIONS UTILS ──────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* step delays */
+.step:nth-child(1) { transition-delay: 0s; }
+.step:nth-child(2) { transition-delay: 0.12s; }
+.step:nth-child(3) { transition-delay: 0.24s; }
+
+.offer-card:nth-child(1) { transition-delay: 0s; }
+.offer-card:nth-child(2) { transition-delay: 0.1s; }
+.offer-card:nth-child(3) { transition-delay: 0.18s; }
+
+.stat-card:nth-child(1) { transition-delay: 0s; }
+.stat-card:nth-child(2) { transition-delay: 0.1s; }
+.stat-card:nth-child(3) { transition-delay: 0.2s; }
+
+.sec-card:nth-child(1) { transition-delay: 0s; }
+.sec-card:nth-child(2) { transition-delay: 0.1s; }
+.sec-card:nth-child(3) { transition-delay: 0.18s; }
+.sec-card:nth-child(4) { transition-delay: 0.26s; }
+
+/* ── RESPONSIVE NAV ──────────────────────────────── */
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ── NAVBAR ──────────────────────────────────── -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26C17.81 13.47 19 11.38 19 9c0-3.87-3.13-7-7-7z" fill="white" opacity="0.9"/>
+        <path d="M9 21h6M10 23h4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <span class="nav-logo-text">UniVoice</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#offering">Features</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#security">Security</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <span class="theme-icon sun">☀</span>
+      <span class="theme-icon moon">☾</span>
+    </button>
+    <button class="btn-cta-nav">Join Beta</button>
+  </div>
+</nav>
+
+<!-- ── HERO ──────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <div class="hero-glow hero-glow-3"></div>
+
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Now in beta — language learning, reimagined
+    </div>
+
+    <h1 class="hero-headline">
+      Speak with the world.<br/>
+      <em>Grow together.</em>
+    </h1>
+
+    <p class="hero-sub">
+      UniVoice is a living, social language platform where real conversations — guided by an AI coach — turn nervous learners into confident speakers.
+    </p>
+
+    <div class="hero-actions">
+      <button class="btn-primary">Get Early Access</button>
+      <button class="btn-secondary">See how it works →</button>
+    </div>
+
+    <div class="hero-wave-wrap">
+      <div class="wave-container" id="heroWave"></div>
+      <p class="wave-label">AI coach Sora — listening</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── OFFERING ──────────────────────────────────── -->
+<section class="offering" id="offering">
+  <div class="reveal">
+    <span class="section-label">What we offer</span>
+    <h2 class="section-title">Everything you need to actually <em style="font-style:italic;color:var(--button)">speak</em></h2>
+    <p class="section-desc">We built UniVoice around one belief: fluency comes from doing, not studying. Every feature exists to get you talking.</p>
+  </div>
+
+  <div class="offering-grid">
+
+    <!-- Wide card: speaking rooms -->
+    <div class="offer-card wide">
+      <div class="offer-card-accent" style="background: linear-gradient(90deg, var(--teal), var(--button))"></div>
+      <div>
+        <div class="offer-icon-wrap" style="background: color-mix(in srgb, var(--teal) 15%, transparent);">🗣️</div>
+        <h3>Live Speaking Rooms</h3>
+        <p>Jump into a real-time room with native speakers and fellow learners. Practice Vietnamese, English, or Mandarin in a low-pressure, guided setting with up to 6 participants. Rooms are topic-guided so you always have something to talk about.</p>
+        <span class="offer-tag" style="background:color-mix(in srgb,var(--teal)15%,transparent);color:var(--teal);">LIVE · MULTIPLAYER</span>
+      </div>
+      <div class="room-preview">
+        <div class="room-participants" id="roomParticipants">
+          <div class="participant"><span class="participant-dot" style="background:#4a9e80"></span> Linh · VI</div>
+          <div class="participant"><span class="participant-dot" style="background:#c8821a"></span> Marco · EN</div>
+          <div class="participant"><span class="participant-dot" style="background:#FE8C00"></span> Sora AI</div>
+        </div>
+        <div class="room-wave" id="roomWave"></div>
+      </div>
+    </div>
+
+    <!-- AI Coach -->
+    <div class="offer-card">
+      <div class="offer-card-accent" style="background: var(--button)"></div>
+      <div class="offer-icon-wrap" style="background:color-mix(in srgb,var(--button)15%,transparent);">✨</div>
+      <h3>Sora — Your AI Coach</h3>
+      <p>Sora isn't a chatbot. She mirrors your energy, gently corrects mistakes in context, and shifts seamlessly between languages as the conversation evolves. Warm. Patient. Always there.</p>
+      <span class="offer-tag" style="background:color-mix(in srgb,var(--amber)15%,transparent);color:var(--amber);">POWERED BY xAI</span>
+    </div>
+
+    <!-- Social -->
+    <div class="offer-card">
+      <div class="offer-card-accent" style="background: color-mix(in srgb, var(--accent) 80%, var(--amber))"></div>
+      <div class="offer-icon-wrap" style="background:color-mix(in srgb,var(--accent)15%,transparent);">💬</div>
+      <h3>Social & Direct Messages</h3>
+      <p>Connect with practice partners, send voice DMs, follow learners you vibe with, and revisit your sessions with full transcripts. Language learning is a social sport.</p>
+      <span class="offer-tag" style="background:color-mix(in srgb,var(--accent)15%,transparent);color:var(--accent);">COMMUNITY · DMs</span>
+    </div>
+
+    <!-- Topics -->
+    <div class="offer-card" style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+      <div>
+        <div class="offer-card-accent" style="background: var(--teal)"></div>
+        <div class="offer-icon-wrap" style="background:color-mix(in srgb,var(--teal)15%,transparent);">🗺️</div>
+        <h3>49 Curated Conversation Topics</h3>
+        <p>Every session starts with a topic designed by language educators — complete with starter questions, cultural context, and AI framing. From street food to travel dreams, there's always something real to talk about.</p>
+        <span class="offer-tag" style="background:color-mix(in srgb,var(--teal)15%,transparent);color:var(--teal);">VI · EN · ZH</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.6rem;padding:1rem 0;">
+        <span style="padding:0.4rem 0.9rem;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:0.8rem;color:var(--muted);">🍜 Street Food</span>
+        <span style="padding:0.4rem 0.9rem;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:0.8rem;color:var(--muted);">✈️ Travel Dreams</span>
+        <span style="padding:0.4rem 0.9rem;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:0.8rem;color:var(--muted);">🏙 City Life</span>
+        <span style="padding:0.4rem 0.9rem;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:0.8rem;color:var(--muted);">💻 Tech & Work</span>
+        <span style="padding:0.4rem 0.9rem;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:0.8rem;color:var(--muted);">🎵 Music & Art</span>
+        <span style="padding:0.4rem 0.9rem;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:0.8rem;color:var(--muted);">👨‍👩‍👧 Family</span>
+        <span style="padding:0.4rem 0.9rem;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:0.8rem;color:var(--muted);">🌱 Environment</span>
+        <span style="padding:0.4rem 0.9rem;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:0.8rem;color:var(--muted);">+ 42 more</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ──────────────────────────────── -->
+<section class="how" id="how">
+  <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto;">
+    <span class="section-label" style="justify-content:center;"><span></span>How it works</span>
+    <h2 class="section-title">From sign-up to speaking in <em style="font-style:italic;color:var(--button)">minutes</em></h2>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Create your profile</h3>
+      <p>Tell us which languages you speak and which you're learning. No tests, no pressure — just set your goals and go.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Join or host a room</h3>
+      <p>Browse live rooms by language and topic, or host your own. Our matchmaking connects you with compatible partners in seconds.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Talk with Sora & friends</h3>
+      <p>Sora facilitates the conversation, gently coaches mid-session, and generates a full transcript after so you can review every word.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOCIAL PROOF ──────────────────────────────── -->
+<section class="social-proof" id="languages">
+  <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto;">
+    <span class="section-label" style="justify-content:center;"><span></span>Languages & community</span>
+    <h2 class="section-title">One platform, every voice</h2>
+  </div>
+
+  <!-- Ticker -->
+  <div style="overflow:hidden;margin-top:3rem;">
+    <div class="lang-ticker" id="langTicker"></div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-num">3<span class="stat-unit">+</span></div>
+      <div class="stat-label">Languages at launch</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">49</div>
+      <div class="stat-label">Curated conversation topics</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Conversations waiting for you</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECURITY ──────────────────────────────────── -->
+<section class="security" id="security">
+  <div class="reveal">
+    <span class="section-label">Security & trust</span>
+    <h2 class="section-title">Your voice. Your data. <em style="font-style:italic;color:var(--teal)">Protected.</em></h2>
+    <p class="section-desc">We built UniVoice with privacy-first principles. Every conversation, message, and piece of personal data is treated with care — not as a product.</p>
+  </div>
+
+  <div class="security-grid">
+    <div class="sec-card">
+      <div class="sec-icon" style="background:color-mix(in srgb,var(--teal)15%,transparent);">🔐</div>
+      <div>
+        <h3>End-to-End Audio Encryption</h3>
+        <p>All live voice sessions are encrypted in transit using LiveKit's secure WebRTC stack. Nobody — not even us — can listen in on your conversations.</p>
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-icon" style="background:color-mix(in srgb,var(--amber)15%,transparent);">🛡️</div>
+      <div>
+        <h3>Row-Level Security</h3>
+        <p>Every query to our database is governed by Supabase's Row-Level Security. Your data is strictly scoped — other users can only see what you choose to share.</p>
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-icon" style="background:color-mix(in srgb,var(--button)15%,transparent);">🔑</div>
+      <div>
+        <h3>Signed Room Tokens</h3>
+        <p>Every speaking room requires a cryptographically signed token issued at session time. No spoofing, no uninvited guests — rooms are private by default.</p>
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-icon" style="background:color-mix(in srgb,#a78bfa 15%,transparent);">🚫</div>
+      <div>
+        <h3>Zero Data Selling</h3>
+        <p>We don't sell your data. We don't share transcripts with third parties. Your voice practice stays yours — it's as simple as that.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust-strip reveal">
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Supabase RLS
+    </div>
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      WebRTC Encrypted
+    </div>
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      Session Tokens
+    </div>
+    <div class="trust-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      Privacy First
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ──────────────────────────────────────── -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div style="position:relative;z-index:2;text-align:center;">
+    <span class="section-label" style="justify-content:center;">Ready to speak?</span>
+    <h2 class="cta-title">Join the UniVoice beta<br/>and find your voice.</h2>
+    <p class="cta-sub">Early access is open now. Be among the first to practice, connect, and grow.</p>
+    <div class="download-btns">
+      <a href="#" class="download-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        <div>
+          <span class="download-btn-label">Download on the</span>
+          <span class="download-btn-store">App Store</span>
+        </div>
+      </a>
+      <a href="#" class="download-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.64.17.95.02l12.46-7.2-2.78-2.78L3.18 23.76zm17.65-10.41c.23-.3.37-.67.37-1.08 0-.4-.13-.77-.36-1.06L18.4 9.9 15.26 13l2.34 2.34 3.23-1.99zm-18.47.22l2.43 2.43 2.42-2.42L4.87 11.2c-.4.23-.69.66-.69 1.13 0 .5.28.95.69 1.2l.49.24zm15.22-8.68L5.12 12.93l2.78 2.78L20.05 8.51l.03-3.62z"/></svg>
+        <div>
+          <span class="download-btn-label">Get it on</span>
+          <span class="download-btn-store">Google Play</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────────────── -->
+<footer>
+  <span class="footer-brand">UniVoice</span>
+  <ul class="footer-links">
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <span class="footer-copy">© 2026 UniVoice. All rights reserved.</span>
+</footer>
+
+<script>
+/* ── THEME TOGGLE ──────────────────────────────── */
+const toggle = document.getElementById('themeToggle');
+const html = document.documentElement;
+let theme = localStorage.getItem('uv-theme') || 'light';
+html.setAttribute('data-theme', theme);
+
+toggle.addEventListener('click', () => {
+  theme = theme === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', theme);
+  localStorage.setItem('uv-theme', theme);
+});
+
+/* ── HERO WAVE ──────────────────────────────────── */
+const heroWave = document.getElementById('heroWave');
+const BAR_COUNT = 36;
+for (let i = 0; i < BAR_COUNT; i++) {
+  const bar = document.createElement('div');
+  bar.className = 'wave-bar';
+  const maxH = 8 + Math.sin(i / BAR_COUNT * Math.PI) * 44 + Math.random() * 10;
+  bar.style.setProperty('--h', `${maxH}px`);
+  bar.style.animationDelay = `${(i / BAR_COUNT) * 1.4}s`;
+  bar.style.opacity = 0.4 + Math.sin(i / BAR_COUNT * Math.PI) * 0.6;
+  heroWave.appendChild(bar);
+}
+
+/* ── ROOM WAVE ──────────────────────────────────── */
+const roomWave = document.getElementById('roomWave');
+for (let i = 0; i < 28; i++) {
+  const bar = document.createElement('div');
+  bar.className = 'room-bar';
+  const rh = 4 + Math.random() * 22;
+  bar.style.setProperty('--rh', `${rh}px`);
+  bar.style.animationDelay = `${Math.random() * 1.2}s`;
+  roomWave.appendChild(bar);
+}
+
+/* ── LANG TICKER ────────────────────────────────── */
+const langs = [
+  { flag: '🇻🇳', name: 'Tiếng Việt' },
+  { flag: '🇬🇧', name: 'English' },
+  { flag: '🇨🇳', name: '普通话' },
+  { flag: '🇯🇵', name: '日本語' },
+  { flag: '🇰🇷', name: '한국어' },
+  { flag: '🇪🇸', name: 'Español' },
+  { flag: '🇫🇷', name: 'Français' },
+  { flag: '🇩🇪', name: 'Deutsch' },
+  { flag: '🇮🇩', name: 'Bahasa' },
+  { flag: '🇹🇭', name: 'ภาษาไทย' },
+];
+const ticker = document.getElementById('langTicker');
+// Duplicate for seamless loop
+[...langs, ...langs].forEach(l => {
+  const chip = document.createElement('span');
+  chip.className = 'lang-chip';
+  chip.innerHTML = `${l.flag} ${l.name}`;
+  ticker.appendChild(chip);
+});
+
+/* ── INTERSECTION OBSERVER ──────────────────────── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal, .offer-card, .step, .stat-card, .sec-card').forEach(el => {
+  observer.observe(el);
+});
+
+/* ── OFFERING GRID – remove wide class on mobile ── */
+function checkWide() {
+  const wides = document.querySelectorAll('.offer-card.wide');
+  wides.forEach(w => {
+    if (window.innerWidth < 768) {
+      w.style.gridTemplateColumns = '1fr';
+    } else {
+      w.style.gridTemplateColumns = '';
+    }
+  });
+}
+checkWide();
+window.addEventListener('resize', checkWide);
+</script>
+</body>
+</html>
