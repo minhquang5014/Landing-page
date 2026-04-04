@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════
    NextStar — main.js
-   Landing page interactions & animations
+   Three.js star field + page interactions
 ═══════════════════════════════════════════════ */
 
 /* ── THEME TOGGLE ──────────────────────────────── */
@@ -8,196 +8,229 @@ function initTheme() {
   const toggle = document.getElementById('themeToggle');
   const html   = document.documentElement;
   let theme    = localStorage.getItem('ns-theme') || 'light';
-
   html.setAttribute('data-theme', theme);
 
   toggle.addEventListener('click', () => {
     theme = theme === 'light' ? 'dark' : 'light';
     html.setAttribute('data-theme', theme);
     localStorage.setItem('ns-theme', theme);
-    // Restart star canvas colours
-    drawStars();
   });
 }
 
-/* ── STAR FIELD CANVAS ─────────────────────────── */
-function initStarCanvas() {
-  const canvas = document.getElementById('starCanvas');
-  if (!canvas) return;
-  const ctx    = canvas.getContext('2d');
-  let stars    = [];
-  let raf;
+/* ── THREE.JS STAR FIELD ───────────────────────── */
+function initThreeHero() {
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas || typeof THREE === 'undefined') return;
 
-  function resize() {
-    canvas.width  = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    buildStars();
-  }
+  const getW = () => canvas.offsetWidth;
+  const getH = () => canvas.offsetHeight;
+  const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
 
-  function buildStars() {
-    stars = [];
-    const count = Math.floor((canvas.width * canvas.height) / 6000);
+  /* Renderer */
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(getW(), getH());
+
+  /* Scene + camera */
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(70, getW() / getH(), 0.1, 1000);
+  camera.position.z = 28;
+
+  /* Root group so we can rotate all stars together */
+  const root = new THREE.Group();
+  scene.add(root);
+
+  /* Star groups — different colors, sizes, twinkle speeds */
+  const GROUPS = [
+    { count: 90,  color: 0xFE8C00, size: 1.0,  speed: 0.55, baseOp: 0.45 }, // amber
+    { count: 65,  color: 0x4a9e80, size: 0.8,  speed: 0.75, baseOp: 0.38 }, // teal
+    { count: 150, color: 0xfff4e8, size: 0.5,  speed: 0.38, baseOp: 0.42 }, // warm white
+    { count: 18,  color: 0xe8a87c, size: 2.2,  speed: 0.28, baseOp: 0.55 }, // large accent stars
+  ];
+
+  const groups = GROUPS.map(({ count, color, size, speed, baseOp }) => {
+    const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      stars.push({
-        x:      Math.random() * canvas.width,
-        y:      Math.random() * canvas.height,
-        r:      Math.random() * 1.5 + 0.3,
-        phase:  Math.random() * Math.PI * 2,
-        speed:  0.003 + Math.random() * 0.008,
-      });
+      pos[i * 3]     = (Math.random() - 0.5) * 85;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 65;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 40;
     }
-  }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const mat = new THREE.PointsMaterial({
+      color, size, transparent: true,
+      opacity: baseOp, sizeAttenuation: true,
+      depthWrite: false,
+    });
+    const pts = new THREE.Points(geo, mat);
+    root.add(pts);
+    return { mat, speed, baseOp, phase: Math.random() * Math.PI * 2 };
+  });
 
-  function drawStars() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const fill   = isDark ? 'rgba(255,255,255,' : 'rgba(26,26,26,';
+  /* Mouse parallax */
+  let mx = 0, my = 0, camX = 0, camY = 0;
+  window.addEventListener('mousemove', e => {
+    mx = (e.clientX / window.innerWidth  - 0.5);
+    my = (e.clientY / window.innerHeight - 0.5);
+  });
 
-    stars.forEach(s => {
-      s.phase += s.speed;
-      const alpha = 0.3 + Math.sin(s.phase) * 0.3;
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = fill + alpha + ')';
-      ctx.fill();
+  /* Animation loop */
+  let t = 0;
+  (function animate() {
+    requestAnimationFrame(animate);
+    t += 0.008;
+
+    const dark   = isDark();
+    const opMult = dark ? 1.0 : 0.55;
+
+    /* Per-group twinkle */
+    groups.forEach(({ mat, speed, baseOp, phase }) => {
+      mat.opacity = baseOp * opMult * (0.55 + 0.45 * Math.sin(t * speed + phase));
     });
 
-    raf = requestAnimationFrame(drawStars);
-  }
+    /* Slow drift */
+    root.rotation.y += 0.0007;
+    root.rotation.x  = Math.sin(t * 0.08) * 0.04;
 
-  window.addEventListener('resize', resize);
-  resize();
-  drawStars();
+    /* Smooth mouse parallax on camera */
+    camX += (mx * 4  - camX) * 0.025;
+    camY += (-my * 3 - camY) * 0.025;
+    camera.position.x = camX;
+    camera.position.y = camY;
 
-  // expose drawStars so theme toggle can call it
-  window.drawStars = drawStars;
+    renderer.render(scene, camera);
+  })();
+
+  /* Resize */
+  window.addEventListener('resize', () => {
+    camera.aspect = getW() / getH();
+    camera.updateProjectionMatrix();
+    renderer.setSize(getW(), getH());
+  });
 }
 
-/* ── HERO STAGE METER ──────────────────────────── */
-function initStageMeter() {
-  const container = document.getElementById('stageMeter');
+/* ── HERO FULL WAVE (bottom of room card) ──────── */
+function initHeroFullWave() {
+  const container = document.getElementById('heroFullWave');
   if (!container) return;
 
-  const BAR_COUNT = 40;
-
+  const BAR_COUNT = 28;
   for (let i = 0; i < BAR_COUNT; i++) {
-    const bar    = document.createElement('div');
-    bar.className = 'stage-bar';
-
-    const position = i / BAR_COUNT;
-    const envelope = Math.sin(position * Math.PI);          // 0 → 1 → 0
-    const minH   = 4 + envelope * 8;
-    const maxH   = 14 + envelope * 48 + Math.random() * 10;
-    const delay  = (position * 1.6).toFixed(3);
-
-    bar.style.setProperty('--min-h', `${minH}px`);
-    bar.style.setProperty('--max-h', `${maxH}px`);
-    bar.style.animationDelay = `${delay}s`;
-    bar.style.opacity = (0.35 + envelope * 0.65).toFixed(2);
-
+    const bar = document.createElement('div');
+    bar.className = 'mock-fw-bar';
+    const pos = i / BAR_COUNT;
+    const env = Math.sin(pos * Math.PI);
+    bar.style.setProperty('--wh', `${6 + env * 26 + Math.random() * 6}px`);
+    bar.style.animationDelay = `${(pos * 1.4).toFixed(2)}s`;
+    bar.style.opacity = (0.3 + env * 0.7).toFixed(2);
     container.appendChild(bar);
   }
 }
 
-/* ── ROOM VISUALIZER ───────────────────────────── */
-function initRoomViz() {
-  const container = document.getElementById('roomViz');
+/* ── MINI WAVE (speaking participant) ──────────── */
+function initMiniWave() {
+  const container = document.getElementById('miniWave1');
   if (!container) return;
 
-  for (let i = 0; i < 32; i++) {
-    const bar    = document.createElement('div');
-    bar.className = 'room-viz-bar';
-    const rh     = (5 + Math.random() * 26).toFixed(1);
-    bar.style.setProperty('--rh', `${rh}px`);
-    bar.style.animationDelay = `${(Math.random() * 1.3).toFixed(2)}s`;
+  for (let i = 0; i < 7; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'mock-pw-bar';
+    const mh = 3 + Math.random() * 9;
+    bar.style.setProperty('--mh', `${mh}px`);
+    bar.style.animationDelay = `${(Math.random() * 1.1).toFixed(2)}s`;
     container.appendChild(bar);
   }
 }
 
-/* ── LANGUAGE TICKER ───────────────────────────── */
+/* ── LANGUAGE TICKER ────────────────────────────── */
 function initTicker() {
   const track = document.getElementById('tickerTrack');
   if (!track) return;
 
   const langs = [
-    { flag: '🇻🇳', name: 'Tiếng Việt' },
-    { flag: '🇬🇧', name: 'English'    },
-    { flag: '🇨🇳', name: '普通话'      },
-    { flag: '🇯🇵', name: '日本語'      },
-    { flag: '🇰🇷', name: '한국어'      },
-    { flag: '🇪🇸', name: 'Español'    },
-    { flag: '🇫🇷', name: 'Français'   },
-    { flag: '🇩🇪', name: 'Deutsch'    },
-    { flag: '🇮🇩', name: 'Bahasa'     },
-    { flag: '🇹🇭', name: 'ภาษาไทย'   },
-    { flag: '🇵🇹', name: 'Português'  },
-    { flag: '🇮🇹', name: 'Italiano'   },
+    { code: 'vn', name: 'Tiếng Việt'      },
+    { code: 'gb', name: 'British English'  },
+    { code: 'us', name: 'American English' },
+    { code: 'cn', name: '普通话'            },
+    { code: 'jp', name: '日本語'            },
+    { code: 'kr', name: '한국어'            },
+    { code: 'es', name: 'Español'          },
+    { code: 'fr', name: 'Français'         },
+    { code: 'de', name: 'Deutsch'          },
+    { code: 'id', name: 'Bahasa'           },
+    { code: 'th', name: 'ภาษาไทย'         },
+    { code: 'pt', name: 'Português'        },
+    { code: 'it', name: 'Italiano'         },
   ];
 
-  // Duplicate for seamless infinite loop
-  [...langs, ...langs].forEach(({ flag, name }) => {
+  /* Duplicate for seamless loop */
+  [...langs, ...langs].forEach(({ code, name }) => {
     const chip = document.createElement('span');
-    chip.className   = 'lang-chip';
-    chip.textContent = `${flag} ${name}`;
+    chip.className = 'lang-chip';
+
+    const img = document.createElement('img');
+    img.src   = `https://cdn.jsdelivr.net/gh/lipis/flag-icons/flags/4x3/${code}.svg`;
+    img.alt   = code.toUpperCase();
+    img.style.cssText = 'width:22px;height:15px;border-radius:3px;object-fit:cover;flex-shrink:0;';
+
+    /* Fallback: show code text if image fails */
+    img.onerror = () => {
+      img.style.display = 'none';
+      const fb = document.createElement('span');
+      fb.textContent = code.toUpperCase();
+      fb.style.cssText = 'font-family:monospace;font-size:0.65rem;font-weight:700;color:var(--muted);';
+      chip.insertBefore(fb, chip.firstChild);
+    };
+
+    const label = document.createElement('span');
+    label.textContent = name;
+
+    chip.appendChild(img);
+    chip.appendChild(label);
     track.appendChild(chip);
   });
 }
 
-/* ── INTERSECTION OBSERVER ─────────────────────── */
+/* ── INTERSECTION OBSERVER (scroll reveals) ─────── */
 function initReveal() {
-  const targets = document.querySelectorAll(
-    '.reveal, .feat-card, .step-item, .stat-card, .sec-card'
-  );
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-        }
-      });
-    },
-    { threshold: 0.1 }
-  );
-
-  targets.forEach(el => observer.observe(el));
+  document.querySelectorAll(
+    '.reveal, .reveal-left, .reveal-right, .stat-card, .sec-card'
+  ).forEach(el => observer.observe(el));
 }
 
-/* ── NAVBAR SCROLL SHADOW ──────────────────────── */
-function initNavShadow() {
-  const nav = document.querySelector('nav');
+/* ── NAVBAR SCROLL SHADOW ───────────────────────── */
+function initNavScroll() {
+  const nav = document.getElementById('navbar');
   if (!nav) return;
-
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 20) {
-      nav.style.boxShadow = '0 2px 24px rgba(0,0,0,0.08)';
-    } else {
-      nav.style.boxShadow = 'none';
-    }
+    nav.classList.toggle('scrolled', window.scrollY > 24);
   }, { passive: true });
 }
 
-/* ── SMOOTH SCROLL FOR NAV LINKS ───────────────── */
+/* ── SMOOTH SCROLL ──────────────────────────────── */
 function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', (e) => {
-      const target = document.querySelector(anchor.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     });
   });
 }
 
-/* ── BOOT ──────────────────────────────────────── */
+/* ── BOOT ───────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
-  initStarCanvas();
-  initStageMeter();
-  initRoomViz();
+  initThreeHero();
+  initHeroFullWave();
+  initMiniWave();
   initTicker();
   initReveal();
-  initNavShadow();
+  initNavScroll();
   initSmoothScroll();
 });

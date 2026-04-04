@@ -5,67 +5,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>NextStar — Your stage. Your voice. Your moment.</title>
 <meta name="description" content="NextStar is the social language learning platform where new stars rise. Practice speaking with real people and Sora, your AI coach." />
-
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;1,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
-
 <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
 
-<!-- ════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════
      NAVBAR
-════════════════════════════════════════════ -->
-<nav>
+══════════════════════════════════════════════ -->
+<nav id="navbar">
   <a href="#" class="nav-logo">
     <div class="nav-logo-icon">
-      <!-- Star mic logo -->
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
-        <path d="M12 2l2.09 6.26L20 9.27l-4.91 4.73L16.18 20 12 17.27 7.82 20l1.09-6L4 9.27l5.91-.01L12 2z"
-              fill="white" opacity="0.95"/>
+      <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+        <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" fill="white" opacity="0.95"/>
       </svg>
     </div>
-    <span class="nav-logo-text">NextStar</span>
+    <span class="nav-logo-name">NextStar</span>
   </a>
 
-  <ul class="nav-links">
+  <ul class="nav-center">
     <li><a href="#features">Features</a></li>
     <li><a href="#how">How it works</a></li>
     <li><a href="#security">Security</a></li>
-    <li><a href="#languages">Languages</a></li>
   </ul>
 
   <div class="nav-right">
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+    <button class="theme-pill" id="themeToggle" aria-label="Toggle theme">
       <span class="theme-icon sun">☀</span>
       <span class="theme-icon moon">☾</span>
     </button>
-    <button class="btn-nav-cta">Join Beta ✦</button>
+    <button class="btn-join">Get Started →</button>
   </div>
 </nav>
 
-<!-- ════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════
      HERO
-════════════════════════════════════════════ -->
+══════════════════════════════════════════════ -->
 <section class="hero">
-  <!-- Animated star field -->
-  <canvas id="starCanvas"></canvas>
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-mesh"></div>
 
-  <!-- Spotlight cone from top -->
-  <div class="hero-spotlight"></div>
-
-  <!-- Glow blobs -->
-  <div class="glow glow-1"></div>
-  <div class="glow glow-2"></div>
-  <div class="glow glow-3"></div>
-
-  <div class="hero-inner">
+  <!-- Left: text -->
+  <div class="hero-text">
     <div class="hero-badge">
       <span class="badge-star">✦</span>
-      Now in beta &mdash; language learning, reimagined
+      Now in beta — language learning, reimagined
     </div>
 
     <h1 class="hero-headline">
@@ -74,7 +60,7 @@
     </h1>
 
     <p class="hero-sub">
-      NextStar is the social platform where language learners step onto the stage, find their voice, and thrive — guided by Sora, your AI coach, and a community of real speakers.
+      NextStar is the social platform where language learners step onto the stage, find their voice, and thrive — with Sora, your AI coach, and a real community of speakers.
     </p>
 
     <div class="hero-actions">
@@ -82,274 +68,343 @@
       <button class="btn-ghost">See how it works →</button>
     </div>
 
-    <!-- Live stage meter visual -->
-    <div class="hero-stage">
-      <div class="stage-meter" id="stageMeter"></div>
-      <p class="stage-label">✦ Sora is on stage — listening</p>
-      <div class="stage-avatars">
-        <div class="stage-av">🇻🇳</div>
-        <div class="stage-av">🇬🇧</div>
-        <div class="stage-av">🇨🇳</div>
-        <div class="stage-av">✨</div>
-        <span class="stage-count">+2,400 learning now</span>
-      </div>
+    <p class="hero-waitlist">Join <strong>2,400+</strong> others already on the waitlist.</p>
+  </div>
+
+  <!-- Right: floating UI mockups -->
+  <div class="hero-visual">
+
+    <!-- Topic starter card — top left -->
+    <div class="mock-card mock-topic-card">
+      <div class="mock-tc-label">Today's stage topic</div>
+      <div class="mock-tc-text">"Your favorite memory from childhood"</div>
     </div>
-  </div>
-</section>
 
-<!-- ════════════════════════════════════════════
-     FEATURES
-════════════════════════════════════════════ -->
-<section class="features" id="features">
-  <div class="reveal">
-    <span class="section-eyebrow">What we offer</span>
-    <h2 class="section-title">Everything you need to<br/><em style="font-style:italic;color:var(--button)">own the stage.</em></h2>
-    <p class="section-desc">We built NextStar around one conviction: fluency comes from performing, not studying. Every feature exists to get you speaking in front of a real audience.</p>
-  </div>
+    <!-- Main room card — center -->
+    <div class="mock-card mock-main">
+      <div class="mock-room-header">
+        <div class="mock-live-dot"></div>
+        <span class="mock-live-txt">LIVE</span>
+        <span class="mock-topic-chip">🍜 Street Food</span>
+      </div>
 
-  <div class="features-grid">
-
-    <!-- Live Speaking Rooms — wide left -->
-    <div class="feat-card span-7">
-      <div class="feat-accent-bar" style="background: linear-gradient(90deg, var(--teal), var(--button));"></div>
-      <div class="feat-icon" style="background: color-mix(in srgb, var(--teal) 15%, transparent);">🎙️</div>
-      <h3>Live Speaking Rooms</h3>
-      <p>Jump into a real-time room with native speakers and fellow learners. Up to 6 participants, topic-guided, low-pressure — like a rehearsal stage before the world.</p>
-      <span class="feat-tag" style="background: color-mix(in srgb,var(--teal)15%,transparent); color:var(--teal);">LIVE · MULTIPLAYER</span>
-
-      <!-- Room mock -->
-      <div class="room-mock" style="margin-top:1.5rem;">
-        <div class="room-participants">
-          <div class="participant-chip"><span class="p-dot" style="background:var(--teal)"></span>Linh · VI</div>
-          <div class="participant-chip"><span class="p-dot" style="background:var(--amber)"></span>Marco · EN</div>
-          <div class="participant-chip"><span class="p-dot" style="background:var(--button)"></span>Sora AI ✦</div>
+      <div class="mock-participants">
+        <div class="mock-p speaking">
+          <div class="mock-av" style="background:#4a9e80">L</div>
+          <span class="mock-p-name">Linh <span class="mock-p-flag">🇻🇳</span></span>
+          <div class="mock-p-wave" id="miniWave1"></div>
         </div>
-        <div class="room-viz" id="roomViz"></div>
+        <div class="mock-p">
+          <div class="mock-av" style="background:#c8821a">M</div>
+          <span class="mock-p-name">Marco <span class="mock-p-flag">🇬🇧</span></span>
+        </div>
+        <div class="mock-p">
+          <div class="mock-av" style="background:#FE8C00">✦</div>
+          <span class="mock-p-name">Sora <span class="mock-p-flag" style="color:var(--button)">AI</span></span>
+        </div>
       </div>
+
+      <div class="mock-full-wave" id="heroFullWave"></div>
     </div>
 
-    <!-- Sora AI Coach — narrow right -->
-    <div class="feat-card span-5">
-      <div class="feat-accent-bar" style="background: linear-gradient(90deg, var(--button), var(--amber));"></div>
-      <div class="feat-icon" style="background: color-mix(in srgb, var(--button) 15%, transparent);">✨</div>
-      <h3>Sora — Your AI Coach</h3>
-      <p>Sora isn't a chatbot. She mirrors your energy, corrects gently in context, and code-switches across Vietnamese, English, and Mandarin as the conversation breathes. Warm. Patient. Always there.</p>
-      <span class="feat-tag" style="background:color-mix(in srgb,var(--amber)15%,transparent);color:var(--amber);">POWERED BY xAI</span>
-    </div>
-
-    <!-- Social & DMs -->
-    <div class="feat-card span-4">
-      <div class="feat-accent-bar" style="background: var(--accent);"></div>
-      <div class="feat-icon" style="background: color-mix(in srgb, var(--accent) 15%, transparent);">💬</div>
-      <h3>Social & Voice DMs</h3>
-      <p>Follow practice partners, send voice messages, revisit sessions with full AI-generated transcripts. Language learning is a social sport.</p>
-      <span class="feat-tag" style="background:color-mix(in srgb,var(--accent)15%,transparent);color:var(--accent);">COMMUNITY · DMs</span>
-    </div>
-
-    <!-- Smart Matchmaking -->
-    <div class="feat-card span-4">
-      <div class="feat-accent-bar" style="background: #a78bfa;"></div>
-      <div class="feat-icon" style="background: color-mix(in srgb, #a78bfa 15%, transparent);">⚡</div>
-      <h3>Instant Matchmaking</h3>
-      <p>Our PostgreSQL-powered matchmaking finds compatible conversation partners in seconds — by language level, target tongue, and topic preference.</p>
-      <span class="feat-tag" style="background:color-mix(in srgb,#a78bfa 15%,transparent);color:#a78bfa;">NO WAITING</span>
-    </div>
-
-    <!-- Session Transcripts -->
-    <div class="feat-card span-4">
-      <div class="feat-accent-bar" style="background: var(--teal);"></div>
-      <div class="feat-icon" style="background: color-mix(in srgb, var(--teal) 15%, transparent);">📋</div>
-      <h3>Full Session Transcripts</h3>
-      <p>Every conversation is captured and transcribed automatically. Review what you said, what Sora corrected, and track your progress over time.</p>
-      <span class="feat-tag" style="background:color-mix(in srgb,var(--teal)15%,transparent);color:var(--teal);">AUTO-GENERATED</span>
-    </div>
-
-    <!-- Curated Topics — full width -->
-    <div class="feat-card span-12">
-      <div class="feat-accent-bar" style="background: linear-gradient(90deg, var(--amber), var(--teal));"></div>
+    <!-- Sora coaching — top right -->
+    <div class="mock-card mock-notif">
+      <div class="mock-notif-icon">✦</div>
       <div>
-        <div class="feat-icon" style="background: color-mix(in srgb, var(--amber) 15%, transparent);">🗺️</div>
-        <h3>49 Curated Conversation Topics</h3>
-        <p>Every session starts with a topic designed by language educators — complete with starter questions, cultural context, and AI framing so you never run out of things to say.</p>
-        <span class="feat-tag" style="background:color-mix(in srgb,var(--amber)15%,transparent);color:var(--amber);">VI · EN · ZH</span>
+        <span class="mock-notif-from">Sora coaching</span>
+        <p class="mock-notif-text">Great flow! Try "thật ra" here — sounds more natural.</p>
       </div>
-      <div class="topic-chips" style="align-content:flex-start;">
-        <span class="topic-chip">🍜 Street Food</span>
-        <span class="topic-chip">✈️ Travel Dreams</span>
-        <span class="topic-chip">🏙 City Life</span>
-        <span class="topic-chip">💻 Tech & Work</span>
-        <span class="topic-chip">🎵 Music & Art</span>
-        <span class="topic-chip">👨‍👩‍👧 Family</span>
-        <span class="topic-chip">🌱 Environment</span>
-        <span class="topic-chip">🎮 Gaming</span>
-        <span class="topic-chip">📚 Books & Film</span>
-        <span class="topic-chip">🍳 Cooking</span>
-        <span class="topic-chip">+ 39 more ✦</span>
+    </div>
+
+    <!-- Transcript ready — bottom left -->
+    <div class="mock-card mock-badge">
+      <span style="font-size:1rem">📋</span>
+      <span class="mock-badge-text">Session transcript ready</span>
+      <span class="mock-new">NEW</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FEATURE 1 — Sora AI coach  (text left, visual right)
+══════════════════════════════════════════════ -->
+<section class="feature-section" id="features">
+  <div class="feature-inner">
+
+    <div class="feature-text reveal-left">
+      <div class="feature-eyebrow">AI coaching</div>
+      <h2 class="feature-title">Meet <em>Sora</em>, your always-on language coach.</h2>
+      <p class="feature-desc">Sora isn't a chatbot. She mirrors your energy, corrects mistakes in context, and code-switches naturally between Vietnamese, English, and Mandarin as the conversation breathes.</p>
+      <p class="feature-desc">Warm. Patient. Always there — whether you're fluent or just starting out.</p>
+    </div>
+
+    <div class="feature-visual blob-amber reveal-right">
+      <div class="mock-chat-wrap">
+        <div class="mock-chat-header">
+          <div class="mock-chat-av">✦</div>
+          <div>
+            <span class="mock-chat-name">Sora</span>
+            <span class="mock-chat-status"><span class="status-dot"></span> On stage with you</span>
+          </div>
+        </div>
+        <div class="chat-bubbles">
+          <div class="bubble sora">
+            <span class="bubble-from">✦ Sora</span>
+            Tell me about your favorite food from home.
+          </div>
+          <div class="bubble user">
+            Ở Hà Nội, tôi thích... I mean, I love bún chả!
+          </div>
+          <div class="bubble sora">
+            <span class="bubble-from">✦ Sora</span>
+            Love that! Your code-switching was natural. Try saying the full sentence in Vietnamese next time — you're closer than you think. 🌟
+          </div>
+          <div class="typing-wrap">
+            <div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div>
+          </div>
+        </div>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- ════════════════════════════════════════════
-     HOW IT WORKS
-════════════════════════════════════════════ -->
-<section class="how" id="how">
-  <div class="reveal" style="text-align:center; max-width:600px; margin:0 auto;">
-    <span class="section-eyebrow" style="justify-content:center;">How it works</span>
-    <h2 class="section-title">From sign-up to<br/><em style="font-style:italic;color:var(--button)">the spotlight</em> — in minutes.</h2>
-  </div>
+<!-- ══════════════════════════════════════════════
+     FEATURE 2 — Live Rooms (visual left, text right)
+══════════════════════════════════════════════ -->
+<section class="feature-section alt">
+  <div class="feature-inner flip">
 
-  <div class="steps-track">
-    <div class="step-item">
-      <div class="step-num">01</div>
-      <h3>Build your profile</h3>
-      <p>Set your native tongue, pick your target language, and choose your level. No placement tests — just honest self-assessment and a goal.</p>
+    <div class="feature-text reveal-right">
+      <div class="feature-eyebrow">Live speaking rooms</div>
+      <h2 class="feature-title">Your stage is <em>always open.</em></h2>
+      <p class="feature-desc">Browse live rooms by language and topic — or host your own in seconds. Our matchmaking connects you with compatible speakers instantly. No scheduling, no pressure.</p>
+      <p class="feature-desc">Up to 6 participants per room. Sora facilitates so you never run out of things to say.</p>
     </div>
-    <div class="step-item">
-      <div class="step-num">02</div>
-      <h3>Step into a room</h3>
-      <p>Browse live stages by language and topic. Join one instantly or host your own. Our matchmaking gets you connected in seconds.</p>
+
+    <div class="feature-visual blob-teal reveal-left">
+      <div class="mock-rooms-wrap">
+        <div class="room-row active">
+          <span class="room-row-emoji">🍜</span>
+          <div class="room-row-info">
+            <span class="room-row-topic">Street Food in Asia</span>
+            <span class="room-row-sub">Linh, Marco + Sora · VI / EN</span>
+          </div>
+          <span class="room-row-badge badge-live">● LIVE</span>
+        </div>
+        <div class="room-row">
+          <span class="room-row-emoji">✈️</span>
+          <div class="room-row-info">
+            <span class="room-row-topic">Travel Dreams</span>
+            <span class="room-row-sub">3 speakers · EN / ZH</span>
+          </div>
+          <span class="room-row-badge badge-live">● LIVE</span>
+        </div>
+        <div class="room-row">
+          <span class="room-row-emoji">🎵</span>
+          <div class="room-row-info">
+            <span class="room-row-topic">Music &amp; Memories</span>
+            <span class="room-row-sub">Starting in 5 min · VI / EN</span>
+          </div>
+          <span class="room-row-badge badge-open">OPEN</span>
+        </div>
+        <div class="room-row">
+          <span class="room-row-emoji">💻</span>
+          <div class="room-row-info">
+            <span class="room-row-topic">Tech &amp; Work Life</span>
+            <span class="room-row-sub">2 / 6 speakers · EN / ZH</span>
+          </div>
+          <span class="room-row-badge badge-live">● LIVE</span>
+        </div>
+        <div class="room-row">
+          <span class="room-row-emoji">🌱</span>
+          <div class="room-row-info">
+            <span class="room-row-topic">Environment &amp; Future</span>
+            <span class="room-row-sub">Open · Any language</span>
+          </div>
+          <span class="room-row-badge badge-open">HOST</span>
+        </div>
+      </div>
     </div>
-    <div class="step-item">
-      <div class="step-num">03</div>
-      <h3>Speak. Grow. Shine.</h3>
-      <p>Sora facilitates and coaches live. After every session, get a full transcript and a short progress note. Then do it again — stars are made through repetition.</p>
-    </div>
+
   </div>
 </section>
 
-<!-- ════════════════════════════════════════════
-     LANGUAGES & STATS
-════════════════════════════════════════════ -->
-<section class="langs" id="languages">
-  <div class="reveal" style="text-align:center; max-width:580px; margin:0 auto;">
-    <span class="section-eyebrow" style="justify-content:center;">Languages & community</span>
-    <h2 class="section-title">One stage.<br/>Every voice.</h2>
-  </div>
+<!-- ══════════════════════════════════════════════
+     FEATURE 3 — Session Transcripts (text left, visual right)
+══════════════════════════════════════════════ -->
+<section class="feature-section">
+  <div class="feature-inner">
 
-  <div class="ticker-wrap">
+    <div class="feature-text reveal-left">
+      <div class="feature-eyebrow">Session transcripts</div>
+      <h2 class="feature-title">Every word you spoke, <em>captured.</em></h2>
+      <p class="feature-desc">After every session, receive a full AI-generated transcript with Sora's inline coaching notes. Review your mistakes, celebrate your wins, track your progress over time.</p>
+      <p class="feature-desc">Automatically generated. Always private. Searchable.</p>
+    </div>
+
+    <div class="feature-visual blob-amber reveal-right">
+      <div class="mock-transcript-wrap">
+        <div class="tr-header">
+          <span class="tr-title">Session #12 · Street Food</span>
+          <span class="tr-meta">18 min · 3 speakers</span>
+        </div>
+        <div>
+          <div class="tr-row">
+            <span class="tr-who" style="color:var(--teal)">LINH</span>
+            <span class="tr-text">"Ở Hà Nội, bún chả là món ăn yêu thích của tôi..."</span>
+            <span class="tr-time">0:32</span>
+          </div>
+          <div class="tr-row">
+            <span class="tr-who" style="color:var(--amber)">MARCO</span>
+            <span class="tr-text">"I tried pho yesterday, it was absolutely amazing."</span>
+            <span class="tr-time">1:14</span>
+          </div>
+          <div class="tr-row">
+            <span class="tr-who" style="color:var(--button)">SORA</span>
+            <span class="tr-text">"Marco, try: 'phở ngon tuyệt' — it means exactly that!"</span>
+            <span class="tr-time">1:28</span>
+            <div class="tr-note">✦ Coaching note: great vocabulary opportunity</div>
+          </div>
+          <div class="tr-row">
+            <span class="tr-who" style="color:var(--teal)">LINH</span>
+            <span class="tr-text">"Exactly! And the broth takes hours to make..."</span>
+            <span class="tr-time">1:45</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     LANGUAGES TICKER
+══════════════════════════════════════════════ -->
+<section class="langs-section" id="languages">
+  <div class="langs-header">
+    <div class="section-eyebrow">Languages &amp; community</div>
+    <h2 class="section-title">One stage. Every voice.</h2>
+  </div>
+  <div class="ticker-outer">
     <div class="ticker-track" id="tickerTrack"></div>
   </div>
+</section>
 
+<!-- ══════════════════════════════════════════════
+     STATS
+══════════════════════════════════════════════ -->
+<section class="stats-section">
+  <div class="stats-header reveal">
+    <div class="section-eyebrow">By the numbers</div>
+    <h2 class="section-title">Built for real practice</h2>
+    <p class="stats-desc">Every feature is designed to get you talking — not studying.</p>
+  </div>
   <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-num">3<span class="stat-accent">+</span></div>
-      <div class="stat-label">Languages at launch</div>
+    <div class="stat-card reveal">
+      <div class="stat-num">3<span class="stat-acc">+</span></div>
+      <div class="stat-lbl">Languages at launch</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-card reveal">
       <div class="stat-num">49</div>
-      <div class="stat-label">Curated conversation topics</div>
+      <div class="stat-lbl">Curated conversation topics</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-num">✦</div>
-      <div class="stat-label">Unlimited stages waiting</div>
+    <div class="stat-card reveal">
+      <div class="stat-num">∞</div>
+      <div class="stat-lbl">Stages waiting for you</div>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════
      SECURITY
-════════════════════════════════════════════ -->
-<section class="security" id="security">
-  <div class="reveal">
-    <span class="section-eyebrow">Security & trust</span>
-    <h2 class="section-title">Your voice. Your data.<br/><em style="font-style:italic;color:var(--teal)">Protected.</em></h2>
-    <p class="section-desc">We built NextStar with privacy-first principles from day one. Every conversation, message, and piece of personal data is treated with care — never as a product to be sold.</p>
-  </div>
+══════════════════════════════════════════════ -->
+<section class="security-section" id="security">
+  <div class="security-inner">
+    <div class="security-header">
+      <div class="feature-eyebrow">Security &amp; trust</div>
+      <h2 class="feature-title">Your voice. Your data. <em>Protected.</em></h2>
+      <p class="feature-desc">We built NextStar with privacy-first principles. Every conversation is treated with care — never as a product to sell.</p>
+    </div>
 
-  <div class="security-grid">
-
-    <div class="sec-card">
-      <div class="sec-icon" style="background: color-mix(in srgb, var(--teal) 15%, transparent);">🔐</div>
-      <div>
-        <h3>End-to-End Audio Encryption</h3>
-        <p>All live voice sessions run over LiveKit's secure WebRTC stack with end-to-end encryption. Nobody — not even us — can listen in on your conversations.</p>
+    <div class="security-grid">
+      <div class="sec-card reveal">
+        <div class="sec-icon" style="background:color-mix(in srgb,var(--teal) 12%,transparent)">🔐</div>
+        <div>
+          <h3>End-to-End Audio Encryption</h3>
+          <p>All voice sessions run over LiveKit's secure WebRTC stack. Nobody — not even us — can listen in on your conversations.</p>
+        </div>
+      </div>
+      <div class="sec-card reveal">
+        <div class="sec-icon" style="background:color-mix(in srgb,var(--amber) 12%,transparent)">🛡️</div>
+        <div>
+          <h3>Row-Level Security</h3>
+          <p>Every database query is enforced by Supabase RLS policies. Your data is strictly scoped — others only see what you share.</p>
+        </div>
+      </div>
+      <div class="sec-card reveal">
+        <div class="sec-icon" style="background:color-mix(in srgb,var(--button) 12%,transparent)">🔑</div>
+        <div>
+          <h3>Signed Room Tokens</h3>
+          <p>Every speaking room requires a cryptographically signed token issued per-session. No spoofing, no uninvited guests.</p>
+        </div>
+      </div>
+      <div class="sec-card reveal">
+        <div class="sec-icon" style="background:color-mix(in srgb,#a78bfa 12%,transparent)">🚫</div>
+        <div>
+          <h3>Zero Data Selling</h3>
+          <p>We don't sell your data. We don't share transcripts with third parties. Your voice practice is yours — full stop.</p>
+        </div>
       </div>
     </div>
 
-    <div class="sec-card">
-      <div class="sec-icon" style="background: color-mix(in srgb, var(--amber) 15%, transparent);">🛡️</div>
-      <div>
-        <h3>Row-Level Security</h3>
-        <p>Every database query is enforced by Supabase's Row-Level Security policies. Your data is strictly scoped — other users only see what you explicitly choose to share.</p>
-      </div>
-    </div>
-
-    <div class="sec-card">
-      <div class="sec-icon" style="background: color-mix(in srgb, var(--button) 15%, transparent);">🔑</div>
-      <div>
-        <h3>Signed Room Tokens</h3>
-        <p>Every speaking room requires a cryptographically signed token issued per-session, validated server-side before entry. No spoofing, no uninvited guests.</p>
-      </div>
-    </div>
-
-    <div class="sec-card">
-      <div class="sec-icon" style="background: color-mix(in srgb, #a78bfa 15%, transparent);">🚫</div>
-      <div>
-        <h3>Zero Data Selling</h3>
-        <p>We don't sell your data. We don't share transcripts with third parties. Your voice practice is yours — full stop. No exceptions, no asterisks.</p>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="trust-row reveal">
-    <div class="trust-item">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      Supabase RLS
-    </div>
-    <div class="trust-item">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      LiveKit WebRTC E2E
-    </div>
-    <div class="trust-item">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-      Signed Session Tokens
-    </div>
-    <div class="trust-item">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Privacy by Design
+    <div class="trust-strip reveal">
+      <span class="trust-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Supabase RLS
+      </span>
+      <span class="trust-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        LiveKit WebRTC E2E
+      </span>
+      <span class="trust-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Signed Session Tokens
+      </span>
+      <span class="trust-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Privacy by Design
+      </span>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════
      CTA
-════════════════════════════════════════════ -->
-<section class="cta">
+══════════════════════════════════════════════ -->
+<section class="cta-section">
   <div class="cta-glow"></div>
   <div class="cta-inner">
     <div class="cta-eyebrow">Ready for your moment?</div>
     <h2 class="cta-title">Step onto the stage.<br/>Your star is rising.</h2>
-    <p class="cta-sub">Early access is open now. Be among the first to practice, connect, and grow into the speaker you were meant to be.</p>
-
-    <div class="download-row">
+    <p class="cta-sub">Early access is open now. Be among the first to practice, connect, and grow.</p>
+    <div class="dl-row">
       <a href="#" class="dl-btn">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-        </svg>
-        <div>
-          <span class="dl-btn-small">Download on the</span>
-          <span class="dl-btn-big">App Store</span>
-        </div>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        <div><span class="dl-small">Download on the</span><span class="dl-big">App Store</span></div>
       </a>
       <a href="#" class="dl-btn">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M3.18 23.76c.3.17.64.17.95.02l12.46-7.2-2.78-2.78L3.18 23.76zm17.65-10.41c.23-.3.37-.67.37-1.08 0-.4-.13-.77-.36-1.06L18.4 9.9 15.26 13l2.34 2.34 3.23-1.99zm-18.47.22l2.43 2.43 2.42-2.42L4.87 11.2c-.4.23-.69.66-.69 1.13 0 .5.28.95.69 1.2l.49.24zm15.22-8.68L5.12 12.93l2.78 2.78L20.05 8.51l.03-3.62z"/>
-        </svg>
-        <div>
-          <span class="dl-btn-small">Get it on</span>
-          <span class="dl-btn-big">Google Play</span>
-        </div>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.64.17.95.02l12.46-7.2-2.78-2.78L3.18 23.76zm17.65-10.41c.23-.3.37-.67.37-1.08 0-.4-.13-.77-.36-1.06L18.4 9.9 15.26 13l2.34 2.34 3.23-1.99zm-18.47.22l2.43 2.43 2.42-2.42L4.87 11.2c-.4.23-.69.66-.69 1.13 0 .5.28.95.69 1.2l.49.24zm15.22-8.68L5.12 12.93l2.78 2.78L20.05 8.51l.03-3.62z"/></svg>
+        <div><span class="dl-small">Get it on</span><span class="dl-big">Google Play</span></div>
       </a>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════
      FOOTER
-════════════════════════════════════════════ -->
+══════════════════════════════════════════════ -->
 <footer>
   <span class="footer-brand">NextStar ✦</span>
   <ul class="footer-links">
@@ -361,6 +416,8 @@
   <span class="footer-copy">© 2026 NextStar. All rights reserved.</span>
 </footer>
 
+<!-- Three.js + main script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="main.js"></script>
 </body>
 </html>
