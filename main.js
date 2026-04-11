@@ -223,6 +223,135 @@ function initSmoothScroll() {
   });
 }
 
+/* ── CHAT BUBBLE ────────────────────────────────── */
+function initChatBubble() {
+  const bubble   = document.getElementById('chatBubble');
+  const win      = document.getElementById('chatWindow');
+  const closeBtn = document.getElementById('chatWinClose');
+  const input    = document.getElementById('chatInput');
+  const sendBtn  = document.getElementById('chatSend');
+  const messages = document.getElementById('chatMessages');
+  if (!bubble || !win) return;
+
+  const SYSTEM_PROMPT = `You are Sora, the friendly AI language coach for NextStar — a social language learning platform where learners practice speaking with real people and AI. You are warm, encouraging, and knowledgeable about language learning. Keep responses concise (2-4 sentences) and helpful. You can answer questions about NextStar, language learning tips, or engage in casual conversation.`;
+
+  /* Conversation history for context */
+  const history = [{ role: 'system', content: SYSTEM_PROMPT }];
+
+  /* Toggle open / close */
+  function toggleChat() {
+    const isOpen = win.classList.contains('open');
+    bubble.classList.toggle('open');
+    win.classList.toggle('open');
+    if (!isOpen) setTimeout(() => input.focus(), 280);
+  }
+
+  bubble.addEventListener('click', toggleChat);
+  closeBtn.addEventListener('click', toggleChat);
+
+  /* Close on Escape */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && win.classList.contains('open')) toggleChat();
+  });
+
+  /* Append a message bubble */
+  function appendMessage(role, text) {
+    const row = document.createElement('div');
+    row.className = `chat-msg ${role}`;
+
+    if (role === 'sora') {
+      const av = document.createElement('div');
+      av.className = 'chat-msg-av';
+      av.textContent = '✦';
+      row.appendChild(av);
+    }
+
+    const bub = document.createElement('div');
+    bub.className = 'chat-msg-bubble';
+    bub.textContent = text;
+    row.appendChild(bub);
+
+    messages.appendChild(row);
+    messages.scrollTop = messages.scrollHeight;
+    return bub;
+  }
+
+  /* Show / remove typing indicator */
+  function showTyping() {
+    const row = document.createElement('div');
+    row.className = 'chat-typing';
+    row.id = 'chatTyping';
+
+    const av = document.createElement('div');
+    av.className = 'chat-msg-av';
+    av.textContent = '✦';
+
+    const dots = document.createElement('div');
+    dots.className = 'chat-typing-dots';
+    for (let i = 0; i < 3; i++) {
+      const d = document.createElement('div');
+      d.className = 'chat-typing-dot';
+      dots.appendChild(d);
+    }
+
+    row.appendChild(av);
+    row.appendChild(dots);
+    messages.appendChild(row);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function removeTyping() {
+    const el = document.getElementById('chatTyping');
+    if (el) el.remove();
+  }
+
+  /* Send a message */
+  async function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    input.value = '';
+    sendBtn.disabled = true;
+
+    appendMessage('user', text);
+    history.push({ role: 'user', content: text });
+
+    showTyping();
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error?.message || `HTTP ${res.status}`);
+      }
+
+      const data  = await res.json();
+      const reply = data.choices?.[0]?.message?.content?.trim() || "Sorry, I couldn't get a response. Please try again!";
+
+      history.push({ role: 'assistant', content: reply });
+      removeTyping();
+      appendMessage('sora', reply);
+    } catch (err) {
+      removeTyping();
+      appendMessage('sora', 'Oops — something went wrong. Check your connection and try again!');
+      console.error('[Sora chat error]', err);
+    } finally {
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+}
+
 /* ── BOOT ───────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
@@ -233,4 +362,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initReveal();
   initNavScroll();
   initSmoothScroll();
+  initChatBubble();
 });
