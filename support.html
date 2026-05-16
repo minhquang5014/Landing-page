@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" href="/assets/logo.png" />
+<title>Support — NextStar</title>
+<meta name="description" content="Get help with NextStar. Contact our team, visit our Facebook page, or ask Sora your questions." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;1,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* ── Page layout ── */
+  .support-wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 120px clamp(1.5rem, 5vw, 3rem) 80px;
+  }
+
+  /* ── Header ── */
+  .support-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--button);
+    margin-bottom: 0.75rem;
+  }
+  .support-title {
+    font-family: 'Lora', serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+  .support-subtitle {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--muted);
+    margin-bottom: 3rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── Back link ── */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 2.5rem;
+    transition: color 0.18s;
+  }
+  .back-link:hover { color: var(--text); }
+
+  /* ── Section headings ── */
+  .support-section-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--button);
+    margin-bottom: 1.25rem;
+  }
+
+  /* ── Contact cards ── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 3.5rem;
+  }
+  @media (max-width: 560px) {
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+  .contact-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.18s, box-shadow 0.2s;
+  }
+  .contact-card:hover {
+    border-color: var(--button);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px color-mix(in srgb, var(--button) 12%, transparent);
+  }
+  .contact-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.3rem;
+  }
+  .contact-card-icon.email-icon {
+    background: color-mix(in srgb, var(--button) 12%, transparent);
+  }
+  .contact-card-icon.fb-icon {
+    background: color-mix(in srgb, #1877F2 12%, transparent);
+  }
+  .contact-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .contact-card-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .contact-card-value {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ── FAQ divider ── */
+  .support-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 0 2.5rem;
+  }
+
+  /* ── FAQ preset chips ── */
+  .faq-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .faq-chip {
+    padding: 0.45rem 0.9rem;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: border-color 0.18s, color 0.18s, background 0.18s;
+    white-space: nowrap;
+  }
+  .faq-chip:hover {
+    border-color: var(--button);
+    color: var(--text);
+    background: color-mix(in srgb, var(--button) 7%, transparent);
+  }
+
+  /* ── FAQ chat window ── */
+  .faq-chat-box {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--card);
+  }
+  .faq-chat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--button) 5%, var(--card));
+  }
+  .faq-chat-av {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: var(--button);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  .faq-chat-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .faq-chat-status {
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .faq-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .faq-messages {
+    min-height: 260px;
+    max-height: 420px;
+    overflow-y: auto;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    scroll-behavior: smooth;
+  }
+  .faq-msg {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+  .faq-msg.user-msg {
+    flex-direction: row-reverse;
+  }
+  .faq-msg-av {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--button);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+  .faq-msg.user-msg .faq-msg-av {
+    background: var(--muted);
+  }
+  .faq-msg-bubble {
+    max-width: 82%;
+    padding: 0.65rem 0.95rem;
+    border-radius: 14px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text);
+    background: color-mix(in srgb, var(--button) 9%, var(--card));
+    border: 1px solid color-mix(in srgb, var(--button) 18%, transparent);
+  }
+  .faq-msg.user-msg .faq-msg-bubble {
+    background: var(--button);
+    color: white;
+    border-color: transparent;
+  }
+  .faq-typing {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 0.65rem 0.95rem;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--button) 9%, var(--card));
+    border: 1px solid color-mix(in srgb, var(--button) 18%, transparent);
+    width: fit-content;
+  }
+  .faq-typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: bounce 1.2s infinite;
+  }
+  .faq-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .faq-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+    40% { transform: translateY(-5px); opacity: 1; }
+  }
+  .faq-input-row {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.85rem 1rem;
+    border-top: 1px solid var(--border);
+    background: var(--card);
+  }
+  .faq-input {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.88rem;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.18s;
+  }
+  .faq-input:focus { border-color: var(--button); }
+  .faq-input::placeholder { color: var(--muted); }
+  .faq-send-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: none;
+    background: var(--button);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.18s, transform 0.15s;
+    flex-shrink: 0;
+  }
+  .faq-send-btn:hover { opacity: 0.88; transform: scale(1.05); }
+  .faq-send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* ── Disclaimer ── */
+  .faq-disclaimer {
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════════ -->
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+        <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" fill="white" opacity="0.95"/>
+      </svg>
+    </div>
+    <span class="nav-logo-name">NextStar</span>
+  </a>
+
+  <div class="nav-right">
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" width="18" height="18">
+        <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" width="18" height="18">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     SUPPORT CONTENT
+══════════════════════════════════════════════ -->
+<main>
+  <div class="support-wrapper">
+
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+        <path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Back to NextStar
+    </a>
+
+    <p class="support-eyebrow">We're here to help</p>
+    <h1 class="support-title">Support</h1>
+    <p class="support-subtitle">Reach out to us directly or ask Sora your questions below — she knows NextStar inside and out.</p>
+
+    <!-- Contact section -->
+    <p class="support-section-title">Contact us</p>
+    <div class="contact-grid">
+
+      <a href="mailto:tranquang5014@gmail.com" class="contact-card">
+        <div class="contact-card-icon email-icon">✉️</div>
+        <div class="contact-card-text">
+          <span class="contact-card-label">Email</span>
+          <span class="contact-card-value">tranquang5014@gmail.com</span>
+        </div>
+      </a>
+
+      <a href="https://www.facebook.com/profile.php?id=61575375467036" target="_blank" rel="noopener noreferrer" class="contact-card">
+        <div class="contact-card-icon fb-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#1877F2">
+            <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.255h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+          </svg>
+        </div>
+        <div class="contact-card-text">
+          <span class="contact-card-label">Facebook</span>
+          <span class="contact-card-value">NextStar Community</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- FAQ section -->
+    <hr class="support-divider" />
+    <p class="support-section-title">Frequently asked questions</p>
+
+    <div class="faq-chips" id="faqChips">
+      <button class="faq-chip" data-q="What is NextStar?">What is NextStar?</button>
+      <button class="faq-chip" data-q="How does Sora AI work?">How does Sora AI work?</button>
+      <button class="faq-chip" data-q="Is my voice data private?">Is my voice data private?</button>
+      <button class="faq-chip" data-q="What languages are supported?">What languages are supported?</button>
+      <button class="faq-chip" data-q="How do practice rooms work?">How do practice rooms work?</button>
+      <button class="faq-chip" data-q="How do I delete my account?">How do I delete my account?</button>
+    </div>
+
+    <div class="faq-chat-box">
+      <div class="faq-chat-header">
+        <div class="faq-chat-av">✦</div>
+        <div>
+          <div class="faq-chat-name">Sora</div>
+          <div class="faq-chat-status">
+            <span class="faq-status-dot"></span>
+            AI support · NextStar
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-messages" id="faqMessages">
+        <div class="faq-msg">
+          <div class="faq-msg-av">✦</div>
+          <div class="faq-msg-bubble">Hi! I'm Sora, NextStar's AI assistant. Ask me anything about the app — tap a question above or type your own below. 🌟</div>
+        </div>
+      </div>
+
+      <div class="faq-input-row">
+        <input
+          type="text"
+          id="faqInput"
+          class="faq-input"
+          placeholder="Ask a question…"
+          autocomplete="off"
+          maxlength="500"
+        />
+        <button class="faq-send-btn" id="faqSend" aria-label="Send">
+          <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+            <line x1="22" y1="2" x2="11" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <p class="faq-disclaimer">Sora can make mistakes. For account or billing issues, please email us directly.</p>
+
+  </div>
+</main>
+
+<!-- ══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+<footer>
+  <span class="footer-brand">NextStar ✦</span>
+  <ul class="footer-links">
+    <li><a href="privacy.html">Privacy</a></li>
+    <li><a href="terms.html">Terms</a></li>
+    <li><a href="support.html">Support</a></li>
+    <li><a href="#">Blog</a></li>
+  </ul>
+  <span class="footer-copy">© 2026 NextStar. All rights reserved.</span>
+</footer>
+
+<script>
+  /* ── Theme ── */
+  const root  = document.documentElement;
+  const btn   = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('ns-theme') || 'light';
+  root.setAttribute('data-theme', saved);
+  btn.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('ns-theme', next);
+  });
+
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+
+  /* ── FAQ chat ── */
+  const SYSTEM_PROMPT = `You are Sora, NextStar's AI support assistant. NextStar is a social language learning app where users practice speaking with real people and with Sora, an AI language coach powered by Grok (xAI). Key facts:
+- Live practice rooms: 2 users + Sora AI per room, matched by language level
+- Languages supported: Vietnamese, English, Mandarin Chinese, and more at launch
+- Speech is transcribed on-device (iOS uses Apple SFSpeechRecognizer; Android uses Google speech recognition). Only text transcripts — never raw audio — are sent to xAI servers for AI coaching.
+- Session transcripts with coaching notes are saved after each session
+- Community feed: users can post, comment, and tag @Sora for AI feedback
+- Age requirement: 12+ (12–17 requires parental consent)
+- Privacy: we do not sell user data and do not use conversations to train AI models
+- To delete your account: go to Profile → Delete Account in the app settings
+- Contact: tranquang5014@gmail.com
+- Facebook: https://www.facebook.com/profile.php?id=61575375467036
+Answer in 2–4 sentences. Be warm, clear, and helpful.`;
+
+  const messagesEl = document.getElementById('faqMessages');
+  const inputEl    = document.getElementById('faqInput');
+  const sendBtn    = document.getElementById('faqSend');
+  const chips      = document.querySelectorAll('.faq-chip');
+
+  const history = [{ role: 'system', content: SYSTEM_PROMPT }];
+
+  function scrollToBottom() {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function addMessage(role, text) {
+    const wrap = document.createElement('div');
+    wrap.className = 'faq-msg' + (role === 'user' ? ' user-msg' : '');
+
+    const av = document.createElement('div');
+    av.className = 'faq-msg-av';
+    av.textContent = role === 'user' ? 'You' : '✦';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'faq-msg-bubble';
+    bubble.textContent = text;
+
+    wrap.appendChild(av);
+    wrap.appendChild(bubble);
+    messagesEl.appendChild(wrap);
+    scrollToBottom();
+    return wrap;
+  }
+
+  function showTyping() {
+    const wrap = document.createElement('div');
+    wrap.className = 'faq-msg';
+    wrap.id = 'faqTyping';
+
+    const av = document.createElement('div');
+    av.className = 'faq-msg-av';
+    av.textContent = '✦';
+
+    const dots = document.createElement('div');
+    dots.className = 'faq-typing';
+    dots.innerHTML = '<div class="faq-typing-dot"></div><div class="faq-typing-dot"></div><div class="faq-typing-dot"></div>';
+
+    wrap.appendChild(av);
+    wrap.appendChild(dots);
+    messagesEl.appendChild(wrap);
+    scrollToBottom();
+  }
+
+  function removeTyping() {
+    const el = document.getElementById('faqTyping');
+    if (el) el.remove();
+  }
+
+  async function ask(text) {
+    if (!text.trim()) return;
+
+    addMessage('user', text);
+    history.push({ role: 'user', content: text });
+    inputEl.value = '';
+    sendBtn.disabled = true;
+    showTyping();
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history }),
+      });
+
+      removeTyping();
+
+      if (!res.ok) throw new Error('Request failed');
+
+      const data = await res.json();
+      const reply = data.choices?.[0]?.message?.content || "Sorry, I couldn't get an answer right now. Please try again or email us.";
+      history.push({ role: 'assistant', content: reply });
+      addMessage('assistant', reply);
+    } catch {
+      removeTyping();
+      addMessage('assistant', "I'm having trouble connecting right now. Please email tranquang5014@gmail.com for help.");
+    } finally {
+      sendBtn.disabled = false;
+      inputEl.focus();
+    }
+  }
+
+  sendBtn.addEventListener('click', () => ask(inputEl.value));
+  inputEl.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(inputEl.value); }
+  });
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => ask(chip.dataset.q));
+  });
+</script>
+</body>
+</html>
